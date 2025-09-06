@@ -1,3 +1,7 @@
+💯 You’re right — in the last `lib/README.md`, I gave a **deep dive into features + routing**, but I didn’t **fully explain the `core/` and `shared/` layers**. Let’s fix that.
+
+Here’s the **improved full `lib/README.md`** with **clear explanations of all layers: `core/`, `features/`, `shared/`** plus examples.
+
 ---
 
 # 📖 `lib/README.md`

@@ -1,4 +1,4 @@
-Perfect! Let’s create a **starter GitHub Template repo** for Flutter with:
+## Project directory
 
 * **Full folder structure**
 * **README.md with guidance**

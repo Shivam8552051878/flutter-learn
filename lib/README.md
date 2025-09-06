@@ -16,33 +16,42 @@ The goal is a **feature-first architecture** that is **scalable, modular, and ma
 
 ## 🚀 Overview
 
+Ah 👍 I see what you mean — the **folder structure diagram I gave you** didn’t render well in Markdown (especially on GitHub), so the `shared/` part probably didn’t show properly in the tree.
+
+Here’s the **correctly formatted tree**, so when you paste it into your `README.md` it will render exactly as intended on GitHub:
+
+---
+
+```markdown
+## 📂 Folder Structure
+
 ```
 
 lib/
-│── main.dart               # App entry point
+│── main.dart                     # App entry point
 │
-│── core/                   # Global modules (used across features)
-│   ├── router.dart          # Centralized navigation
-│   ├── theme/               # Theme, typography, styles
-│   ├── constants/           # Global constants (colors, strings, configs)
-│   └── utils/               # Utility functions (helpers, formatters)
+├── core/                         # Global modules (used across features)
+│   ├── router.dart                # Centralized navigation
+│   ├── theme/                     # Theme, typography, styles
+│   ├── constants/                 # Global constants (colors, strings, configs)
+│   └── utils/                     # Utility functions (helpers, formatters)
 │
-│── features/               # Feature-first modules
-│   ├── auth/                # Authentication
+├── features/                     # Feature-first modules
+│   ├── auth/                      # Authentication
 │   │   └── presentation/
-│   │       ├── screens/     # UI Screens (Login, Signup)
-│   │       └── routes.dart  # Auth routes
+│   │       ├── screens/           # UI Screens (Login, Signup)
+│   │       └── routes.dart        # Auth routes
 │   │
-│   └── home/                # Home dashboard
+│   └── home/                      # Home dashboard
 │       └── presentation/
-│           ├── screens/     # UI Screens (Home)
-│           └── routes.dart  # Home routes
+│           ├── screens/           # UI Screens (Home)
+│           └── routes.dart        # Home routes
 │
-│── shared/                 # Reusable shared components
-│   ├── widgets/             # UI widgets (buttons, cards, etc.)
-│   └── extensions/          # Dart/Flutter extensions
+└── shared/                       # Reusable shared components
+├── widgets/                   # UI widgets (buttons, cards, etc.)
+└── extensions/                # Dart/Flutter extensions
 
-````
+```
 
 ---
 

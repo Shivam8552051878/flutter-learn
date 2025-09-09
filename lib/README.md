@@ -1,103 +1,252 @@
-Absolutely — here's the **rewritten and polished `lib/README.md`** that:
-
-* ✅ Fully explains all three layers: `core/`, `features/`, `shared/`
-* ✅ Uses correct GitHub-compatible folder tree formatting (no broken indentation)
-* ✅ Is clean, copy-paste ready
-* ✅ Includes working Dart examples
-* ✅ Avoids broken nested code blocks
+Totally — and to make sure nothing’s missing, here’s a **single, comprehensive `README.md`** you can drop in the root of your Flutter template repo. It covers: structure, core/shared/data/features, routing, linting, testing, CI, conventions, examples, and workflow.
 
 ---
 
-# 📖 `lib/README.md`
+```markdown
+# 🚀 Flutter App Template (Production-Ready)
 
-````markdown
-# 📂 Flutter `lib/` Folder Structure Guide
+A **general-purpose Flutter template** with a scalable structure, routing, linting, tests, and CI.  
+Use it to bootstrap mobile apps quickly and keep standards consistent across projects.
 
-This guide explains the source code structure inside the `lib/` directory.  
-We follow a **feature-first architecture** designed to be **scalable, modular, and maintainable**.
-
----
-
-## 🚀 Overview
-
-The codebase is organized into three main layers:
-
-- `core/` – Global configs (routing, themes, constants, utils)
-- `features/` – Feature-specific modules (auth, home, etc.)
-- `shared/` – Reusable components shared across features
+> Works great for employee/self-service apps, e-commerce, social apps, dashboards—you name it.
 
 ---
 
-## 📂 Folder Structure
+## 🧭 Table of Contents
 
-```text
+- [Why this template](#-why-this-template)
+- [Tech & decisions](#-tech--decisions)
+- [Project structure](#-project-structure)
+- [Layer-by-layer guide](#-layer-by-layer-guide)
+  - [main.dart](#-maindart)
+  - [core](#-core)
+  - [data](#-data)
+  - [features](#-features)
+  - [shared](#-shared)
+  - [routing](#-routing)
+- [Quality: lint, format, test](#-quality-lint-format-test)
+- [CI: GitHub Actions](#-ci-github-actions)
+- [Running & builds](#-running--builds)
+- [Conventions](#-conventions)
+- [Add a new feature](#-add-a-new-feature)
+- [Environment & secrets (optional)](#-environment--secrets-optional)
+- [Troubleshooting](#-troubleshooting)
+- [License](#-license)
+
+---
+
+## ✅ Why this template
+
+- **Scalable**: feature-first architecture; grows with complexity  
+- **Maintainable**: clear separation of concerns  
+- **Team-friendly**: conventions, CI, and docs included  
+- **Replaceable parts**: you can swap state management, router, or storage later
+
+---
+
+## 🧰 Tech & decisions
+
+- **Flutter** (stable channel)
+- **Routing**: `go_router` (modular, URL-based, nested routes ready)
+- **Linting**: `flutter_lints` with a balanced ruleset (see `analysis_options.yaml`)
+- **CI**: GitHub Actions (analyze, test, optional build)
+- **Testing**: unit + widget tests; coverage artifact
+
+> Prefer a different state management? Drop your choice under each feature’s `application/` folder (Bloc, Riverpod, Provider, etc.).
+
+---
+
+## 📁 Project structure
+
+```
+
 lib/
-├── main.dart                     # App entry point
+│── main.dart                         # App entry point
 │
-├── core/                         # Global modules (used across features)
-│   ├── router.dart               # Centralized navigation
-│   ├── theme/                    # Theme, typography, styles
-│   ├── constants/                # Global constants (colors, strings, configs)
-│   └── utils/                    # Utility functions (helpers, formatters)
+├── core/                             # Global modules (shared across features)
+│   ├── router.dart                   # Centralized GoRouter
+│   ├── theme/                        # Theme, typography, color scheme
+│   │   └── app\_theme.dart
+│   ├── constants/                    # Colors, strings, keys, sizes
+│   │   └── app\_colors.dart
+│   └── utils/                        # Helpers (validators, formatters, etc.)
 │
-├── features/                     # Feature-first modules
-│   ├── auth/                     # Authentication
-│   │   └── presentation/
-│   │       ├── screens/          # UI Screens (Login, Signup)
-│   │       └── routes.dart       # Auth routes
-│   │
-│   └── home/                     # Home dashboard
-│       └── presentation/
-│           ├── screens/          # UI Screens (Home)
-│           └── routes.dart       # Home routes
+├── data/                             # Global data layer (optional)
+│   ├── models/                       # Cross-feature models (if any)
+│   ├── services/                     # API clients, local storage, firebase
+│   └── repositories/                 # Combines services for clean API
 │
-└── shared/                       # Reusable shared components
-    ├── widgets/                  # UI widgets (buttons, cards, etc.)
-    └── extensions/               # Dart/Flutter extensions
+├── features/                         # Feature-first modules
+│   ├── auth/
+│   │   ├── presentation/
+│   │   │   ├── screens/              # Login, Signup, etc.
+│   │   │   └── routes.dart           # Auth routes (GoRouter)
+│   │   ├── application/              # State management (Bloc/Provider/etc.)
+│   │   └── domain/                   # Entities & use cases (optional)
+│   └── home/
+│       ├── presentation/
+│       │   ├── screens/              # Home screen(s)
+│       │   └── routes.dart           # Home routes
+│       ├── application/
+│       └── domain/
+│
+└── shared/                           # Reusable, app-wide building blocks
+├── widgets/                      # Buttons, inputs, cards, shimmers
+│   └── app\_button.dart
+├── extensions/                   # context.showSnack(), StringX, etc.
+│   └── context\_extensions.dart
+└── mixins/                       # Validation, lifecycle, permission helpers
+
 ````
 
 ---
 
-## 🏁 Entry Point
+## 🧱 Layer-by-layer guide
 
-### `main.dart`
+### 🏁 `main.dart`
 
-Initializes the app and sets up the global router and theme.
+Keep this clean—bootstrap only.
 
 ```dart
 import 'package:flutter/material.dart';
 import 'core/router.dart';
 import 'core/theme/app_theme.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Template',
       theme: AppTheme.light,
-      routerConfig: router,
+      routerConfig: router, // defined in core/router.dart
     );
   }
+}
+````
+
+---
+
+### 🏛 Core
+
+**Global, reusable configuration** used by multiple features.
+
+* `router.dart`: central GoRouter (aggregates feature routes)
+* `theme/`: light/dark themes, typography, color scheme
+* `constants/`: `AppColors`, strings, sizes, keys
+* `utils/`: helpers (validators, formatters, logging wrappers)
+
+```dart
+// core/theme/app_theme.dart
+import 'package:flutter/material.dart';
+import '../constants/app_colors.dart';
+
+class AppTheme {
+  static ThemeData get light => ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+        useMaterial3: true,
+      );
+}
+
+// core/constants/app_colors.dart
+import 'package:flutter/material.dart';
+class AppColors {
+  static const primary = Colors.blue;
+  static const secondary = Colors.green;
 }
 ```
 
 ---
 
-## 🏛️ Core Layer
+### 🗄 Data (global, optional)
 
-This is the **foundation of the app** — global code accessible by all features.
+If you have **cross-cutting** models/services (e.g., auth token storage, app-wide API client), place them here.
+Feature-specific data stays inside each feature’s `data/`.
 
-### 📌 `core/router.dart`
+---
 
-Centralized routing using `GoRouter`. Each feature registers its own routes.
+### 🧩 Features
+
+Each feature is self-contained:
+
+```
+features/<feature>/
+│── presentation/   # screens, UI widgets, controllers
+│── application/    # state mgmt (Bloc/Provider/Riverpod/MobX/etc.)
+└── domain/         # entities, value objects, use cases (optional)
+```
+
+> Rule of thumb: if it’s only used by one feature, keep it inside that feature.
+
+---
+
+### 🧰 Shared
+
+**Truly reusable** UI and helpers used across multiple features.
 
 ```dart
+// shared/widgets/app_button.dart
+import 'package:flutter/material.dart';
+
+class AppButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  const AppButton({super.key, required this.label, required this.onPressed});
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+    onPressed: onPressed,
+    child: Text(label),
+  );
+}
+
+// shared/extensions/context_extensions.dart
+import 'package:flutter/material.dart';
+extension ContextX on BuildContext {
+  void showSnack(String message) =>
+      ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(message)));
+}
+```
+
+---
+
+### 🧭 Routing (GoRouter)
+
+**Per-feature routes** → aggregated in a **global router**.
+
+```dart
+// features/auth/presentation/routes.dart
+import 'package:go_router/go_router.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+
+class AuthRoutes {
+  static const login = '/login';
+  static const signup = '/signup';
+
+  static List<GoRoute> routes = [
+    GoRoute(path: login, builder: (_, __) => const LoginScreen()),
+    GoRoute(path: signup, builder: (_, __) => const SignupScreen()),
+  ];
+}
+```
+
+```dart
+// features/home/presentation/routes.dart
+import 'package:go_router/go_router.dart';
+import 'screens/home_screen.dart';
+
+class HomeRoutes {
+  static const home = '/home';
+  static List<GoRoute> routes = [
+    GoRoute(path: home, builder: (_, __) => const HomeScreen()),
+  ];
+}
+```
+
+```dart
+// core/router.dart
 import 'package:go_router/go_router.dart';
 import '../features/auth/presentation/routes.dart';
 import '../features/home/presentation/routes.dart';
@@ -111,121 +260,21 @@ final router = GoRouter(
 );
 ```
 
----
-
-### 📌 `core/theme/`
-
-Defines app-wide theming (light/dark modes, color schemes).
-
 ```dart
-import 'package:flutter/material.dart';
-import '../constants/app_colors.dart';
-
-class AppTheme {
-  static ThemeData get light => ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-        useMaterial3: true,
-      );
-}
-```
-
----
-
-### 📌 `core/constants/`
-
-Global constants (colors, strings, sizes, etc.)
-
-```dart
-import 'package:flutter/material.dart';
-
-class AppColors {
-  static const primary = Colors.blue;
-  static const secondary = Colors.green;
-}
-```
-
----
-
-### 📌 `core/utils/`
-
-General helper functions and utilities.
-
-```dart
-class Validators {
-  static String? email(String? value) {
-    if (value == null || value.isEmpty) return 'Email is required';
-    if (!value.contains('@')) return 'Enter a valid email';
-    return null;
-  }
-}
-```
-
----
-
-## 🧩 Features Layer
-
-Each feature is **self-contained**: it owns its own UI, logic, routes, and possibly state management.
-
-### Example: `features/auth/`
-
-```text
-features/auth/
-└── presentation/
-    ├── screens/
-    │   ├── login_screen.dart
-    │   └── signup_screen.dart
-    └── routes.dart
-```
-
----
-
-### 📌 `routes.dart`
-
-Defines routes for the auth feature.
-
-```dart
-import 'package:go_router/go_router.dart';
-import 'screens/login_screen.dart';
-import 'screens/signup_screen.dart';
-
-class AuthRoutes {
-  static const login = '/login';
-  static const signup = '/signup';
-
-  static List<GoRoute> routes = [
-    GoRoute(
-      path: login,
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      path: signup,
-      builder: (context, state) => const SignupScreen(),
-    ),
-  ];
-}
-```
-
----
-
-### 📌 `login_screen.dart`
-
-Example login UI navigating to the home screen.
-
-```dart
+// features/auth/presentation/screens/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../home/presentation/routes.dart';
+import '../../home/presentation/routes.dart' as home;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => context.go(HomeRoutes.home),
+          onPressed: () => context.go(home.HomeRoutes.home),
           child: const Text('Login → Home'),
         ),
       ),
@@ -236,93 +285,208 @@ class LoginScreen extends StatelessWidget {
 
 ---
 
-## 🖼️ Shared Layer
+## 🧪 Quality: lint, format, test
 
-Holds **reusable components** that are not feature-specific.
+### Linting rules (`analysis_options.yaml`)
 
-### 📌 `shared/widgets/`
+```yaml
+# Start from Flutter's recommended lints
+include: package:flutter_lints/flutter.yaml
 
-Reusable UI components.
+analyzer:
+  exclude:
+    - build/**
+    - .dart_tool/**
+    - lib/generated/**
+
+linter:
+  rules:
+    # Best practices
+    always_use_package_imports: true
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    avoid_print: true
+    avoid_unnecessary_containers: true
+    use_key_in_widget_constructors: true
+
+    # Style
+    prefer_single_quotes: true
+    curly_braces_in_flow_control_structures: true
+    require_trailing_commas: true
+    sort_child_properties_last: true
+
+    # Safety
+    avoid_types_as_parameter_names: true
+    unnecessary_null_checks: true
+```
+
+**Commands**
+
+```bash
+# Lint
+flutter analyze
+
+# Format (fail CI if needed)
+dart format --output=none --set-exit-if-changed .
+
+# Tests + coverage
+flutter test --coverage
+```
+
+---
+
+## 🤖 CI: GitHub Actions
+
+Create `.github/workflows/flutter-ci.yml`:
+
+```yaml
+name: Flutter CI
+
+on:
+  push: { branches: [ main ] }
+  pull_request: { branches: [ main ] }
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test --no-pub --coverage
+
+      - name: Upload coverage (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: coverage/lcov.info
+
+      # Optional compile sanity check
+      - name: Build APK (debug)
+        run: flutter build apk --debug
+```
+
+> Add branch protection to require CI checks to pass before merging.
+
+---
+
+## ▶️ Running & builds
+
+```bash
+# Get deps
+flutter pub get
+
+# Run app (device/emulator must be available)
+flutter run
+
+# Android build
+flutter build apk        # or: flutter build appbundle
+
+# iOS build (macOS)
+flutter build ios
+```
+
+---
+
+## 📏 Conventions
+
+* **Branching**: `feature/<name>`, `fix/<name>`, `release/<version>`
+* **Commits**: Conventional Commits
+
+  * `feat: add login form`
+  * `fix: handle null token`
+  * `chore(ci): add coverage upload`
+* **Imports**: always `package:` imports (no `../..`)
+* **Naming**: `PascalCase` for widgets, `lowerCamelCase` for vars/funcs
+* **Widgets**: prefer `const` constructors
+
+---
+
+## ➕ Add a new feature
+
+1. Create `lib/features/<feature>/` with subfolders:
+
+   ```
+   presentation/
+     screens/
+     routes.dart
+   application/   (Bloc/Provider/Riverpod/etc.)
+   domain/        (optional)
+   ```
+2. Add screens and routes.
+3. Export routes in `<feature>/presentation/routes.dart`.
+4. Register them in `core/router.dart`:
+
+   ```dart
+   routes: [
+     ...ExistingRoutes.routes,
+     ...NewFeatureRoutes.routes,
+   ]
+   ```
+5. Write tests under `test/features/<feature>/`.
+
+---
+
+## 🔐 Environment & secrets (optional)
+
+Use [`flutter_dotenv`](https://pub.dev/packages/flutter_dotenv) for runtime config:
+
+```yaml
+# pubspec.yaml (dependencies)
+flutter_dotenv: ^5.1.0
+```
+
+```
+# .env
+API_BASE_URL=https://api.example.com
+```
 
 ```dart
-import 'package:flutter/material.dart';
-
-class AppButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-
-  const AppButton({super.key, required this.label, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      ),
-      onPressed: onPressed,
-      child: Text(label),
-    );
-  }
+// main.dart
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+Future<void> main() async {
+  await dotenv.load();
+  runApp(const MyApp());
 }
 ```
 
-Usage:
-
-```dart
-AppButton(
-  label: 'Sign In',
-  onPressed: () => context.go('/home'),
-)
-```
+> Never commit real secrets. Use GitHub Environments/Secrets for CI.
 
 ---
 
-### 📌 `shared/extensions/`
+## 🛟 Troubleshooting
 
-Extension methods to simplify code.
-
-```dart
-import 'package:flutter/material.dart';
-
-extension ContextExtensions on BuildContext {
-  void showSnack(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-}
-```
-
-Usage:
-
-```dart
-context.showSnack('Login successful!');
-```
+* **“command not found: flutter”** → Install Flutter & add to PATH.
+* **iOS build fails** → Run `pod repo update && pod install` in `ios/` (macOS).
+* **Lint warnings everywhere** → Open `analysis_options.yaml` and adjust rules to your team’s taste.
+* **Routes not found** → Ensure feature `routes.dart` is exported and included in `core/router.dart`.
 
 ---
 
-## ✅ Best Practices
+## 📄 License
 
-* ✅ **Feature-first**: Keep logic/screens/routes grouped by feature
-* ✅ **Shared layer**: Only for reusable components
-* ✅ **Core layer**: Global configuration only (router, theme, constants)
-* ✅ **Routing**:
-
-  * Each feature defines its own `routes.dart`
-  * Global router (`core/router.dart`) aggregates them
-* ✅ **Scalability**: Structure works for small projects and scales to large apps
-
----
-
-📌 With this structure, your Flutter project is **modular, easy to navigate, and scalable** for growth.
+MIT (change as needed)
 
 ```
 
 ---
 
-Would you like me to:
-- Create a matching `docs/architecture.md` to explain the reasoning and onboarding for new devs?
-- Or generate a wiki page version for GitHub?
-
-Let me know how far you want to take the documentation.
+If you want, I can also generate the **empty folder + placeholder Dart files** to match this README so you can commit/push immediately.
 ```

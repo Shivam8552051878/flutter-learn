@@ -58,7 +58,7 @@ Use it to bootstrap mobile apps quickly and keep standards consistent across pro
 
 ## 📁 Project structure
 
-```
+```Text
 
 lib/
 │── main.dart                         # App entry point
